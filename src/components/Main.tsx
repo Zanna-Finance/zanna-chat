@@ -3,7 +3,12 @@ import { BitteAiChat } from "@bitte-ai/chat";
 import "@bitte-ai/chat/style.css";
 import { useBitteWallet, Wallet } from "@bitte-ai/react";
 import { useEffect, useState } from "react";
-import WelcomeMessage from "./WelcomeMessage";
+import dynamic from 'next/dynamic';
+
+// Dynamically import WelcomeMessage with no SSR
+const WelcomeMessage = dynamic(() => import('./WelcomeMessage'), {
+  ssr: false,
+});
 
 const zannaAgent = {
   id: "zanna-ai",
@@ -16,8 +21,10 @@ const zannaAgent = {
 const Main: React.FC = () => {
   const { selector } = useBitteWallet();
   const [wallet, setWallet] = useState<Wallet | null>(null);
+  const [isMounted, setIsMounted] = useState(false);
 
   useEffect(() => {
+    setIsMounted(true);
     const fetchWallet = async () => {
       if (selector) {
         try {
@@ -30,6 +37,10 @@ const Main: React.FC = () => {
     };
     fetchWallet();
   }, [selector]);
+
+  if (!isMounted) {
+    return null;
+  }
 
   return (
     <main className="flex-1 relative">

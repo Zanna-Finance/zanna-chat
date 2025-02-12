@@ -1,11 +1,19 @@
-import Header from "@/components/Header";
-import Main from "@/components/Main";
+import dynamic from 'next/dynamic';
+
+// Dynamically import components with no SSR
+const Header = dynamic(() => import('@/components/Header'), {
+  ssr: false,
+});
+
+const Main = dynamic(() => import('@/components/Main'), {
+  ssr: false,
+});
 
 export default function Home() {
   return (
-    <div>
+    <>
       <Header />
       <Main />
-    </div>
+    </>
   );
 }
