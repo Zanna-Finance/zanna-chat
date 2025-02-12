@@ -7,8 +7,13 @@ import "./globals.css";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "Bitte AI Chat Boilerplate",
-  description: "Bite AI Chat Boilerplate",
+  title: "Zanna AI - Your DeFi Assistant",
+  description: "Your DeFi assistant for the NEAR Protocol ecosystem",
+  icons: {
+    icon: '/zanna.svg',
+    shortcut: '/zanna.svg',
+    apple: '/zanna.svg',
+  },
 };
 
 export default function RootLayout({
@@ -17,10 +22,13 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <WalletProvider>
-      <html lang="en">
+    <html lang="en">
+      <head>
+        <link rel="icon" href="/zanna.svg" type="image/svg+xml" />
+      </head>
+      <WalletProvider>
         <body className={`${inter.className} antialiased`}>{children}</body>
-      </html>
-    </WalletProvider>
+      </WalletProvider>
+    </html>
   );
 }

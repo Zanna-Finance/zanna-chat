@@ -1,46 +1,53 @@
 "use client";
-
 import { BitteAiChat } from "@bitte-ai/chat";
 import "@bitte-ai/chat/style.css";
 import { useBitteWallet, Wallet } from "@bitte-ai/react";
 import { useEffect, useState } from "react";
 import WelcomeMessage from "./WelcomeMessage";
 
-const bitteAgent = {
-  id: "bitte-assistant",
-  name: "Bitte Assistant",
-  description:
-    "Bitte assistant for interacting with NFTs and Fungible Tokens (FTs) on NEAR Protocol.  Users can query, mint, transfer NFTs, transfer FTs, create drops, and swap tokens.",
+const zannaAgent = {
+  id: "zanna-ai",
+  name: "Zanna AI",
+  description: "Your DeFi assistant for the NEAR Protocol ecosystem",
   verified: true,
-  image: "/bitte.svg",
+  image: "/zanna.svg",
 };
 
 const Main: React.FC = () => {
   const { selector } = useBitteWallet();
-  const [wallet, setWallet] = useState<Wallet>();
+  const [wallet, setWallet] = useState<Wallet | null>(null);
 
   useEffect(() => {
     const fetchWallet = async () => {
-      const walletInstance = await selector.wallet();
-      setWallet(walletInstance);
+      if (selector) {
+        try {
+          const walletInstance = await selector.wallet();
+          setWallet(walletInstance);
+        } catch (error) {
+          console.error("Error fetching wallet:", error);
+        }
+      }
     };
-    if (selector) fetchWallet();
+    fetchWallet();
   }, [selector]);
 
   return (
-    <main className="flex flex-col items-center gap-8 max-w-5xl mx-auto my-4 md:my-8">
-      <div className="h-[calc(100vh-114px)] lg:h-[calc(100vh-180px)] w-full">
+    <main className="flex-1 relative">
+      <div className="h-[calc(100vh-64px)] relative">
         <BitteAiChat
-          options={{ agentImage: bitteAgent.image, agentName: bitteAgent.name }}
-          agentId={bitteAgent.id}
-          wallet={{ near: { wallet } }}
+          options={{
+            agentImage: zannaAgent.image,
+            agentName: zannaAgent.name,
+          }}
+          agentId={zannaAgent.id}
+          wallet={wallet ? { near: { wallet } } : undefined}
           apiUrl="/api/chat"
           colors={{
-            generalBackground: "#18181A",
-            messageBackground: "#0A0A0A",
-            textColor: "#FAFAFA",
-            buttonColor: "#000000",
-            borderColor: "#334155",
+            generalBackground: "#FFFFFF",
+            messageBackground: "#F8F9FC",
+            textColor: "#111827",
+            buttonColor: "#ef4444",
+            borderColor: "#E5E7EB",
           }}
           welcomeMessageComponent={<WelcomeMessage />}
         />
